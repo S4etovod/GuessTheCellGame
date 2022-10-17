@@ -183,13 +183,13 @@
     let winCounter = 0;
     let obj = {};
     for (let i = 0; i < 10; i++) {
-      let rnd = Math.round(Math.random() * 100);
+      let rnd = Math.round(Math.random() * 99);
       if (obj[rnd] == undefined) {
         obj[rnd] = 0;
         tds[rnd].setAttribute("class", "select");
       }
     }
-    let interval = 60;
+    let interval = 45;
     let timerId = setInterval(tmr, 1000);
     function tmr() {
       timer.textContent = "Осталось: " + interval + " секунд";
