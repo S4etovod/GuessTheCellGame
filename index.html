@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -23,8 +22,8 @@
       }
       .setttig {
         border: 3px solid orange;
-        width: 100;
-        height: 30;
+        width: 90px;
+        height: 20px;
         border-radius: 5px;
         margin-bottom: 10px;
       }
@@ -54,18 +53,21 @@
       b {
         background-color: white;
       }
+      button {
+        height: 20px;
+      }
     </style>
   </head>
   <body>
     <div id="wrapper">
-      <header></header>
       <h1>Игра угадай ячейку</h1>
       <main>
         <p>Угадайте 10 загаданных компьютром ячеек</p>
         <div id="settings">
           <input type="text" id="cell" class="setttig" placeholder="Kлетки" />
-          <input type="text" id="clicks" class="setttig" placeholder="Клики" />
-          <button class="setttig">START</button>
+          <input type="text" id="num" class="setttig" placeholder="Клики" />
+          <button class="setttig" id="set">Применить</button>
+          <button class="setttig" id="start">START</button>
         </div>
         <table>
           <tr>
@@ -197,16 +199,22 @@
   <script>
     let tds = document.querySelectorAll("td");
     let timer = document.querySelector("#timer");
-    let button = document.querySelector("button");
+    let button = document.querySelector("#start");
+    let set = document.querySelector("#set");
     let incell = document.querySelector("#cell");
-    let inclicks = document.querySelector("#clicks");
+    let num = document.querySelector("#num");
     let winCounter = 0;
     let obj = {};
     let cell, clicks;
-
+    set.addEventListener("click", function () {
+      cell = +incell.value;
+      clicks = +num.value;
+    });
     button.addEventListener("click", function () {
-      cell = incell.value;
-      clicks = inclicks.value;
+      for (let elem of tds) {
+        elem.removeAttribute("class");
+      }
+      console.log(clicks, cell);
       for (let i = 0; i < cell; i++) {
         let rnd = Math.floor(Math.random() * 100);
         if (obj[rnd] == undefined) {
@@ -230,6 +238,7 @@
       for (let el of tds) {
         el.addEventListener("click", function (event) {
           event.stopPropagation();
+          console.log(event.target.className);
           if (event.target.className == "select") {
             winCounter++;
           }
@@ -246,16 +255,18 @@
             timer.textContent = "ПОБЕДА!!!!";
           }
           if (
-            event.target.className == "select" ||
-            event.target.className == "select"
+            event.target.className == "not" ||
+            event.target.className == "select yes"
           ) {
             clicks--;
           }
           if (clicks < 0) {
             timer.textContent = "YOU LOOSE";
+            clearInterval(timerId);
           }
         });
       }
     });
   </script>
 </html>
+
