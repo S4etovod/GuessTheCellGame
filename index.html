@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -19,6 +20,13 @@
         background-color: orange;
         color: white;
         line-height: 50px;
+      }
+      .setttig {
+        border: 3px solid orange;
+        width: 100;
+        height: 30;
+        border-radius: 5px;
+        margin-bottom: 10px;
       }
       table {
         margin: 0 auto;
@@ -43,13 +51,22 @@
         font-size: 20px;
         color: red;
       }
+      b {
+        background-color: white;
+      }
     </style>
   </head>
   <body>
     <div id="wrapper">
+      <header></header>
       <h1>Игра угадай ячейку</h1>
       <main>
         <p>Угадайте 10 загаданных компьютром ячеек</p>
+        <div id="settings">
+          <input type="text" id="cell" class="setttig" placeholder="Kлетки" />
+          <input type="text" id="clicks" class="setttig" placeholder="Клики" />
+          <button class="setttig">START</button>
+        </div>
         <table>
           <tr>
             <td></td>
@@ -180,45 +197,65 @@
   <script>
     let tds = document.querySelectorAll("td");
     let timer = document.querySelector("#timer");
+    let button = document.querySelector("button");
+    let incell = document.querySelector("#cell");
+    let inclicks = document.querySelector("#clicks");
     let winCounter = 0;
     let obj = {};
-    for (let i = 0; i < 10; i++) {
-      let rnd = Math.round(Math.random() * 99);
-      if (obj[rnd] == undefined) {
-        obj[rnd] = 0;
-        tds[rnd].setAttribute("class", "select");
-      }
-    }
-    let interval = 45;
-    let timerId = setInterval(tmr, 1000);
-    function tmr() {
-      timer.textContent = "Осталось: " + interval + " секунд";
-      interval--;
-      if (interval < 0) {
-        clearInterval(timerId);
-        timer.textContent = "YOU LOOSE";
-      }
-    }
+    let cell, clicks;
 
-    for (let el of tds) {
-      el.addEventListener("click", function (event) {
-        event.stopPropagation();
-        if (event.target.className == "select") {
-          winCounter++;
-        }
-        if (
-          event.target.className == "select" ||
-          event.target.className == "select yes"
-        ) {
-          event.target.setAttribute("class", "select yes");
+    button.addEventListener("click", function () {
+      cell = incell.value;
+      clicks = inclicks.value;
+      for (let i = 0; i < cell; i++) {
+        let rnd = Math.floor(Math.random() * 100);
+        if (obj[rnd] == undefined) {
+          obj[rnd] = 0;
+          tds[rnd].setAttribute("class", "select");
         } else {
-          event.target.setAttribute("class", "not");
+          i--;
         }
-        if (winCounter == 10) {
+      }
+      let interval = 60;
+      let timerId = setInterval(tmr, 1000);
+      function tmr() {
+        timer.textContent = "Осталось: " + interval + " секунд";
+        interval--;
+        if (interval < 0) {
           clearInterval(timerId);
-          timer.textContent = "ПОБЕДА!!!!";
+          timer.textContent = "YOU LOOSE";
         }
-      });
-    }
+      }
+
+      for (let el of tds) {
+        el.addEventListener("click", function (event) {
+          event.stopPropagation();
+          if (event.target.className == "select") {
+            winCounter++;
+          }
+          if (
+            event.target.className == "select" ||
+            event.target.className == "select yes"
+          ) {
+            event.target.setAttribute("class", "select yes");
+          } else {
+            event.target.setAttribute("class", "not");
+          }
+          if (winCounter == cell) {
+            clearInterval(timerId);
+            timer.textContent = "ПОБЕДА!!!!";
+          }
+          if (
+            event.target.className == "select" ||
+            event.target.className == "select"
+          ) {
+            clicks--;
+          }
+          if (clicks < 0) {
+            timer.textContent = "YOU LOOSE";
+          }
+        });
+      }
+    });
   </script>
 </html>
