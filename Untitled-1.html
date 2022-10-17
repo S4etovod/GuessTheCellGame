@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        background-color: lightgray;
+      }
+      footer,
+      header {
+        text-align: center;
+        height: 50px;
+        background-color: orange;
+        color: white;
+        line-height: 50px;
+      }
+      table {
+        margin: 0 auto;
+      }
+      td {
+        margin: 3px;
+        width: 40px;
+        height: 40px;
+        border: 1px solid black;
+        border-radius: 10%;
+        background-color: white;
+      }
+      .yes {
+        background-color: green;
+      }
+      .not {
+        background-color: rgb(161, 126, 149);
+      }
+      .select {
+      }
+      #timer {
+        font-size: 20px;
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="wrapper">
+      <h1>Игра угадай ячейку</h1>
+      <main>
+        <p>Угадайте 10 загаданных компьютром ячеек</p>
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+        <p id="timer"></p>
+      </main>
+      <footer>github.com/S4etovod</footer>
+    </div>
+  </body>
+  <script>
+    let tds = document.querySelectorAll("td");
+    let timer = document.querySelector("#timer");
+    let winCounter = 0;
+    let obj = {};
+    for (let i = 0; i < 10; i++) {
+      let rnd = Math.round(Math.random() * 100);
+      if (obj[rnd] == undefined) {
+        obj[rnd] = 0;
+        tds[rnd].setAttribute("class", "select");
+      }
+    }
+    let interval = 60;
+    let timerId = setInterval(tmr, 1000);
+    function tmr() {
+      timer.textContent = "Осталось: " + interval + " секунд";
+      interval--;
+      if (interval < 0) {
+        clearInterval(timerId);
+        timer.textContent = "YOU LOOSE";
+      }
+    }
+
+    for (let el of tds) {
+      el.addEventListener("click", function (event) {
+        event.stopPropagation();
+        if (event.target.className == "select") {
+          winCounter++;
+        }
+        if (
+          event.target.className == "select" ||
+          event.target.className == "select yes"
+        ) {
+          event.target.setAttribute("class", "select yes");
+        } else {
+          event.target.setAttribute("class", "not");
+        }
+        if (winCounter == 10) {
+          clearInterval(timerId);
+          timer.textContent = "ПОБЕДА!!!!";
+        }
+      });
+    }
+  </script>
+</html>
