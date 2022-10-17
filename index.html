@@ -20,6 +20,9 @@
         color: white;
         line-height: 50px;
       }
+      header {
+        font-size: 25px;
+      }
       .setttig {
         border: 3px solid orange;
         width: 90px;
@@ -60,9 +63,10 @@
   </head>
   <body>
     <div id="wrapper">
-      <h1>Игра угадай ячейку</h1>
+      <header>Игра угадай ячейку</header>
+
       <main>
-        <p>Угадайте 10 загаданных компьютром ячеек</p>
+        <p>Угадайте 10 загаданных ячеек</p>
         <div id="settings">
           <input type="text" id="cell" class="setttig" placeholder="Kлетки" />
           <input type="text" id="num" class="setttig" placeholder="Клики" />
@@ -238,7 +242,7 @@
       for (let el of tds) {
         el.addEventListener("click", function (event) {
           event.stopPropagation();
-          console.log(event.target.className);
+          
           if (event.target.className == "select") {
             winCounter++;
           }
