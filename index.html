@@ -12,7 +12,13 @@
         padding: 0;
         background-color: lightgray;
       }
-      footer,
+      footer {
+        text-align: center;
+        height: 20px;
+        background-color: orange;
+        color: white;
+        line-height: 20px;
+      }
       header {
         text-align: center;
         height: 50px;
@@ -32,6 +38,10 @@
       }
       table {
         margin: 0 auto;
+        border: 4px solid orange;
+        padding: 7px;
+        border-radius: 10px;
+        margin-bottom: 10px;
       }
       td {
         margin: 3px;
@@ -59,19 +69,32 @@
       button {
         height: 20px;
       }
+      #cellCount,
+      #clicksCount {
+        display: inline-block;
+        width: 250px;
+        text-align: left;
+        margin-bottom: 10px;
+        font-size: 18px;
+      }
+      #timer {
+        margin-top: 0px;
+        margin-bottom: 15px;
+      }
     </style>
   </head>
   <body>
     <div id="wrapper">
-      <header>Игра угадай ячейку</header>
+      <header>Игра угадай ячейки</header>
 
       <main>
-        <p>Угадайте 10 загаданных ячеек</p>
+        <p>Угадайте загаданныe ячееки</p>
         <div id="settings">
           <input type="text" id="cell" class="setttig" placeholder="Kлетки" />
           <input type="text" id="num" class="setttig" placeholder="Клики" />
-          <button class="setttig" id="set">Применить</button>
+
           <button class="setttig" id="start">START</button>
+          <p id="timer">Таймер</p>
         </div>
         <table>
           <tr>
@@ -195,7 +218,8 @@
             <td></td>
           </tr>
         </table>
-        <p id="timer"></p>
+        <span id="cellCount">Клеток найдено: </span
+        ><span id="clicksCount">Кликов осталось:</span>
       </main>
       <footer>github.com/S4etovod</footer>
     </div>
@@ -207,18 +231,29 @@
     let set = document.querySelector("#set");
     let incell = document.querySelector("#cell");
     let num = document.querySelector("#num");
+    let cellCount = document.querySelector("#cellCount");
+    let clicksCount = document.querySelector("#clicksCount");
     let winCounter = 0;
     let obj = {};
-    let cell, clicks;
-    set.addEventListener("click", function () {
+    let cell, click;
+    let clicks = 0;
+    let interval = 0;
+    let timerId;
+    button.addEventListener("dblclick", function () {
+      timer.textContent = "Таймер";
+      interval = 60;
       cell = +incell.value;
-      clicks = +num.value;
-    });
-    button.addEventListener("click", function () {
+      click = +num.value;
+      winCounter = 0;
+      clicks = click;
+      obj = {};
+      if (timerId) {
+        clearInterval(timerId);
+      }
       for (let elem of tds) {
         elem.removeAttribute("class");
       }
-      console.log(clicks, cell);
+
       for (let i = 0; i < cell; i++) {
         let rnd = Math.floor(Math.random() * 100);
         if (obj[rnd] == undefined) {
@@ -228,21 +263,28 @@
           i--;
         }
       }
-      let interval = 60;
-      let timerId = setInterval(tmr, 1000);
+
+      timerId = setInterval(tmr, 1000);
       function tmr() {
         timer.textContent = "Осталось: " + interval + " секунд";
         interval--;
-        if (interval < 0) {
+        console.log(timerId, interval);
+        if (interval == 0) {
           clearInterval(timerId);
-          timer.textContent = "YOU LOOSE";
+          timer.textContent = "YOU LOOSE1";
         }
       }
 
       for (let el of tds) {
         el.addEventListener("click", function (event) {
           event.stopPropagation();
-          
+
+          if (
+            el.hasAttribute("class") === false ||
+            event.target.className == "select"
+          ) {
+            clicks--;
+          }
           if (event.target.className == "select") {
             winCounter++;
           }
@@ -258,19 +300,16 @@
             clearInterval(timerId);
             timer.textContent = "ПОБЕДА!!!!";
           }
-          if (
-            event.target.className == "not" ||
-            event.target.className == "select yes"
-          ) {
-            clicks--;
-          }
+
           if (clicks < 0) {
-            timer.textContent = "YOU LOOSE";
+            timer.textContent = "YOU LOOSE2";
             clearInterval(timerId);
           }
+          cellCount.textContent =
+            "Ячеек найдено: " + winCounter + " из " + cell;
+          clicksCount.textContent = "Кликов сделано:" + clicks + " из " + click;
         });
       }
     });
   </script>
 </html>
-
