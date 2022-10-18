@@ -14,10 +14,10 @@
       }
       footer {
         text-align: center;
-        height: 20px;
+        height: 30px;
         background-color: orange;
         color: white;
-        line-height: 20px;
+        line-height: 30px;
       }
       header {
         text-align: center;
@@ -25,16 +25,22 @@
         background-color: orange;
         color: white;
         line-height: 50px;
+        margin-bottom: 0px;
       }
       header {
         font-size: 25px;
       }
       .setttig {
+        text-align: center;
         border: 3px solid orange;
         width: 90px;
         height: 20px;
         border-radius: 5px;
         margin-bottom: 10px;
+      }
+      #num {
+        margin-left: 25px;
+        margin-right: 25px;
       }
       table {
         margin: 0 auto;
@@ -44,6 +50,7 @@
         margin-bottom: 10px;
       }
       td {
+        box-sizing: border-box;
         margin: 3px;
         width: 40px;
         height: 40px;
@@ -51,28 +58,38 @@
         border-radius: 10%;
         background-color: white;
       }
+      td:hover {
+        border: 3px solid rosybrown;
+      }
+      button:focus {
+        border-color: gray;
+      }
       .yes {
         background-color: green;
       }
       .not {
         background-color: rgb(161, 126, 149);
       }
-      .select {
-      }
+
       #timer {
         font-size: 20px;
         color: red;
       }
-      b {
-        background-color: white;
-      }
+
       button {
-        height: 20px;
+        background-color: white;
+        display: inline-block;
+        box-sizing: border-box;
+        border: 3px solid orange;
+        width: 90px;
+        height: 28px;
+        border-radius: 5px;
+        margin-bottom: 10px;
       }
       #cellCount,
       #clicksCount {
         display: inline-block;
-        width: 250px;
+        width: 220px;
         text-align: left;
         margin-bottom: 10px;
         font-size: 18px;
@@ -81,19 +98,39 @@
         margin-top: 0px;
         margin-bottom: 15px;
       }
+      p {
+        margin-top: 5px;
+        font-size: 17px;
+      }
     </style>
   </head>
   <body>
     <div id="wrapper">
-      <header>Игра угадай ячейки</header>
+      <header>Игра угадай клетки</header>
 
       <main>
-        <p>Угадайте загаданныe ячееки</p>
+        <p>
+          Угадайте загаданные клетки <br />
+          Введите количество клеток и кликов <br />
+          ( по умолчанию <b>10/90</b>)
+        </p>
         <div id="settings">
-          <input type="text" id="cell" class="setttig" placeholder="Kлетки" />
-          <input type="text" id="num" class="setttig" placeholder="Клики" />
+          <input
+            type="text"
+            id="cell"
+            class="setttig"
+            value="10"
+            placeholder="Kлетки"
+          />
+          <input
+            type="text"
+            id="num"
+            class="setttig"
+            value="90"
+            placeholder="Клики"
+          />
 
-          <button class="setttig" id="start">START</button>
+          <button class="etttig" id="start"><b>START</b></button>
           <p id="timer">Таймер</p>
         </div>
         <table>
@@ -239,13 +276,13 @@
     let clicks = 0;
     let interval = 0;
     let timerId;
-    button.addEventListener("dblclick", function () {
+    button.addEventListener("click", function () {
       timer.textContent = "Таймер";
       interval = 60;
       cell = +incell.value;
       click = +num.value;
       winCounter = 0;
-      clicks = click;
+      clicks = 0;
       obj = {};
       if (timerId) {
         clearInterval(timerId);
@@ -268,7 +305,8 @@
       function tmr() {
         timer.textContent = "Осталось: " + interval + " секунд";
         interval--;
-      if (interval == 0) {
+
+        if (interval == 0) {
           clearInterval(timerId);
           timer.textContent = "YOU LOOSE1";
         }
@@ -282,7 +320,7 @@
             el.hasAttribute("class") === false ||
             event.target.className == "select"
           ) {
-            clicks--;
+            clicks++;
           }
           if (event.target.className == "select") {
             winCounter++;
@@ -295,13 +333,13 @@
           } else {
             event.target.setAttribute("class", "not");
           }
-          if (winCounter == cell) {
+          if ((winCounter == cell) & (clicks >= 0)) {
             clearInterval(timerId);
             timer.textContent = "ПОБЕДА!!!!";
           }
 
-          if (clicks < 0) {
-            timer.textContent = "YOU LOOSE2";
+          if ((clicks == click) & (winCounter < cell)) {
+            timer.textContent = "YOU LOOSE";
             clearInterval(timerId);
           }
           cellCount.textContent =
@@ -312,3 +350,4 @@
     });
   </script>
 </html>
+
