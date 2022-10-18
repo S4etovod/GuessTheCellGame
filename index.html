@@ -268,8 +268,7 @@
       function tmr() {
         timer.textContent = "Осталось: " + interval + " секунд";
         interval--;
-        console.log(timerId, interval);
-        if (interval == 0) {
+      if (interval == 0) {
           clearInterval(timerId);
           timer.textContent = "YOU LOOSE1";
         }
